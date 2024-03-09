@@ -9,7 +9,7 @@
 </script>
 
 <div class="flex h-screen">
-	<!-- content -->
+	<!-- left panel -->
 	<div class="flex flex-col w-64 m-1 p-3 bg-base-300 rounded">
 		<div class="mb-4">
 			<span class="font-bold">Chats</span>
@@ -22,6 +22,7 @@
 			<a class="cursor-pointer mt-2 font-extralight" on:click={() => ApiKey.set("")}>Change API Key</a>
 		</div>
 	</div>
+	<!-- content -->
 	<div class="flex-1 flex flex-col m1 p-3">
 		<slot/>
 	</div>

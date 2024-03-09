@@ -5,7 +5,7 @@ export async function POST({ request }) {
 	try {
 		const { apiKey, requestData } = await request.json();
 		console.log(requestData);
-		const { model, maxTokens, prompt } = requestData;
+		const { model, maxTokens, prompt, systemPrompt } = requestData;
 		
 		const anthropic = new Anthropic({
 			apiKey: apiKey, // defaults to process.env["ANTHROPIC_API_KEY"]
@@ -15,6 +15,7 @@ export async function POST({ request }) {
 			model: model,
 			max_tokens: maxTokens,
 			messages: prompt,
+			system: systemPrompt
 		});
 		return json(response, { status: 200 });
 		
