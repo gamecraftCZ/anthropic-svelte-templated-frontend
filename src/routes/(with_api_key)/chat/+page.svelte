@@ -65,7 +65,8 @@ let submit = async () => {
 	
 	<div class="flex flex-col overflow-y-auto">
 		{#each messages as message, i (i)}
-			<ChatMessage bind:text={message.text} bind:sender={message.sender} onRemove={() => removeMessage(i)} />
+			<ChatMessage bind:text={message.text} bind:sender={message.sender} onRemove={() => removeMessage(i)} 
+									 defaultRendered={i !== messages.length - 1} />
 		{/each}
 	</div>
 	

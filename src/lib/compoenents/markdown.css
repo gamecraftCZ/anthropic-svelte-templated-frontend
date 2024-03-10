@@ -1,0 +1,7 @@
+code {
+    display: inline-block;
+    background-color: #141414;
+    border-radius: 6px;
+    font-family: courier, monospace;
+    padding: 2px 4px;
+}

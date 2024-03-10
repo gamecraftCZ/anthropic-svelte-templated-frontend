@@ -13,13 +13,13 @@
 	<div class="flex flex-col w-64 m-1 p-3 bg-base-300 rounded">
 		<div class="mb-4">
 			<span class="font-bold">Chats</span>
-			<button class="ml-2 btn">new</button>
+			<a class="ml-2 btn" href="/new-chat">new</a>
 		</div>
 		<button class="btn mb-2">chat 1</button>
 		<button class="btn mb-2">chat 2</button>
 		<div class="flex flex-col items-center mt-auto">
-			<a class="cursor-pointer mt-2 font-light" href="/templates">Templates</a>
-			<a class="cursor-pointer mt-2 font-extralight" on:click={() => ApiKey.set("")}>Change API Key</a>
+<!--			<a class="cursor-pointer mt-2 font-light" href="/templates">Templates</a>-->
+			<button class="cursor-pointer mt-2 font-extralight" on:click={() => ApiKey.set("")}>Change API Key</button>
 		</div>
 	</div>
 	<!-- content -->
