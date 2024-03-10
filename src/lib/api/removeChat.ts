@@ -1,15 +1,14 @@
 import { get } from "svelte/store";
 import { UserToken } from "$lib/stores/auth";
 
-export const getChat = async ({ chatId, token }: {
+export const removeChat = async ({ chatId, token }: {
   chatId: string,
   token?: string
 }): Promise<{
-  success: boolean,
-  data: any
+  success: boolean
 }> => {
   try {
-    const response = await fetch("/api/get-chat", {
+    const response = await fetch("/api/remove-chat", {
       method: "POST",
       body: JSON.stringify({
         token: token !== undefined ? token : get(UserToken),
@@ -20,10 +19,10 @@ export const getChat = async ({ chatId, token }: {
       },
     });
     const success = response.status === 200;
-    return { success, data: ((await response.json()).data) };
+    return { success };
 
   } catch (e) {
-    console.error("getChat error", e);
+    console.error("removeChat error", e);
     return { success: false, data: e };
   }
 };
