@@ -1,14 +1,20 @@
 import { json } from '@sveltejs/kit';
 import Anthropic from '@anthropic-ai/sdk';
+import { User } from "$lib/server/db";
 
 export async function POST({ request }) {
 	try {
-		const { apiKey, requestData } = await request.json();
-		console.log(requestData);
+		const { token, requestData, apiKey } = await request.json();
+
+		const user = await User.findOne({
+			where: { token },
+		});
+		if (!user) return json({"error": "User not found"}, { status: 400 });
+
 		const { model, maxTokens, prompt, systemPrompt } = requestData;
-		
+
 		const anthropic = new Anthropic({
-			apiKey: apiKey, // defaults to process.env["ANTHROPIC_API_KEY"]
+			apiKey: apiKey || user.apiKey, // defaults to process.env["ANTHROPIC_API_KEY"]
 		});
 		
 		const response = await anthropic.messages.create({

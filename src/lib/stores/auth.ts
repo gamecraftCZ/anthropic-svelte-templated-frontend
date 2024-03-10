@@ -1,11 +1,11 @@
 import { derived } from 'svelte/store';
 import { createLocalStorageStore } from './utils';
 import Anthropic from '@anthropic-ai/sdk';
-import { getCompletion } from '$lib/aiUtils';
+import { getCompletion } from '$lib/api/getCompletion';
 
-export const ApiKey = createLocalStorageStore('AuthToken');
+export const UserToken = createLocalStorageStore('UserToken');
 
-export const IsLoggedIn = derived(ApiKey, ($ApiKey, set) => {
+export const IsLoggedIn = derived(UserToken, ($ApiKey, set) => {
 	const updateIsLoggedIn = async () => {
 		console.log(`KEY: '${!!$ApiKey}'`);
 		set(!!$ApiKey);

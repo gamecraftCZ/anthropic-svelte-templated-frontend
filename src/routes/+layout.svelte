@@ -1,4 +1,5 @@
 <script>
+	import "../app.css";
 	import { FlatToast, ToastContainer } from 'svelte-toasts';
 </script>
 

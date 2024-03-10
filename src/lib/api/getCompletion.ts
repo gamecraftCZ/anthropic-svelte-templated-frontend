@@ -1,18 +1,19 @@
 import { get } from 'svelte/store';
-import { ApiKey } from '$lib/stores/auth';
+import { UserToken } from '$lib/stores/auth';
 
-export const getCompletion = async ({ model, prompt, apiKey, maxTokens, systemPrompt }: {
+export const getCompletion = async ({ model, prompt, maxTokens, systemPrompt, apiKey }: {
 	model: string,
 	prompt: any[],
-	apiKey?: string,
 	maxTokens?: number,
-	systemPrompt?: string
+	systemPrompt?: string,
+	apiKey?: string, 
 }): Promise<{ success: boolean, data: any }> => {
 	try {
 		const response = await fetch('/api/completion', {
 			method: 'POST',
 			body: JSON.stringify({
-				apiKey: apiKey !== undefined ? apiKey : get(ApiKey),
+				token: get(UserToken),
+				apiKey: apiKey,
 				requestData: { model, prompt, maxTokens: maxTokens ?? 1024, systemPrompt }
 			}),
 			headers: {
@@ -23,7 +24,7 @@ export const getCompletion = async ({ model, prompt, apiKey, maxTokens, systemPr
 		return { success, data: await response.json() };
 
 	} catch (e) {
-		console.error('Error while getting completion', e);
+		console.error("getCompetion error", e);
 		return { success: false, data: e };
 	}
 };

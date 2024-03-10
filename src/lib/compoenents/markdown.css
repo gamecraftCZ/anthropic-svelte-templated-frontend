@@ -5,3 +5,7 @@ code {
     font-family: courier, monospace;
     padding: 2px 4px;
 }
+
+pre {
+    white-space: pre-wrap;
+}
