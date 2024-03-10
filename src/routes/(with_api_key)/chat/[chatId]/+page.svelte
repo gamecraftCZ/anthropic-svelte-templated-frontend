@@ -121,7 +121,7 @@
 
 {:else}
   <div class="flex flex-col h-screen overflow-hidden">
-    <div>
+    <div class="ml-14">
       <input type="text" class="w-96 h-8 p-2 m-2 input bg-base-300" bind:value={name} placeholder="Chat name" />
       <button class="btn m-2" on:click={saveAsTemplate}>Save as template</button>
     </div>
