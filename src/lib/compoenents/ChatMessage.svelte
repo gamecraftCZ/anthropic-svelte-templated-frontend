@@ -4,13 +4,30 @@
   import { slide } from "svelte/transition";
   import SvelteMarkdown from "svelte-markdown";
   import Markdown from "$lib/compoenents/Markdown.svelte";
+  import { onMount } from "svelte";
 
   export let sender: SenderType;
   export let text: string;
   export let onRemove: (() => void) | undefined;
   export let defaultRendered = false;
-  
+
   let rendered = defaultRendered;
+
+  let textArea: HTMLTextAreaElement;
+
+  const setTextAreaSize = () => {
+    console.log("textArea: ", textArea);
+    if (textArea) {
+      textArea.style = "height: auto;";
+      textArea.style = `height: ${textArea.scrollHeight + "px"};`;
+    }
+  };
+  onMount(() => {
+    setTextAreaSize();
+  });
+  $: if (!rendered && textArea) {
+    setTextAreaSize();
+  }
 </script>
 
 <div transition:slide class={`w-full mr-auto m-2
@@ -22,11 +39,11 @@ ${sender === SenderType.USER ? "pr-20" : "pl-20"}
     <button on:click={onRemove} class="w-3 h-3">
       <TrashBinSolid size="sm" />
     </button>
-    <button class="ml-4 w-4 h-4" on:click={() => rendered = !rendered} >
+    <button class="ml-4 w-4 h-4" on:click={() => rendered = !rendered}>
       {#if rendered}
-        <PenOutline size="sm"/>
+        <PenOutline size="sm" />
       {:else}
-        <CheckOutline size="sm"/>
+        <CheckOutline size="sm" />
       {/if}
     </button>
   </div>
@@ -35,7 +52,8 @@ ${sender === SenderType.USER ? "pr-20" : "pl-20"}
       {#if rendered}
         <Markdown source={text} />
       {:else}
-        <textarea class="textarea w-full bg-base-300/5 overflow-hidden" bind:value={text} />
+        <textarea bind:this={textArea} on:input={setTextAreaSize}
+                  class="textarea w-full bg-base-300/5 overflow-hidden resize-none" bind:value={text} />
       {/if}
     </div>
   </div>
