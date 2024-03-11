@@ -7,5 +7,5 @@ services:
     volumes:
       - "./database:/database"
     ports:
-      - "5072:5173"
+      - "5072:4173"
 

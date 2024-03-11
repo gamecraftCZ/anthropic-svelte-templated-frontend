@@ -1,17 +1,18 @@
-FROM node:20-alpine
+FROM node:20-bookworm-slim
 
 WORKDIR /usr/src/app
 
-RUN apk --no-cache add python3 py3-pip build-base
+RUN apt update
+RUN apt install -y python3 python3-pip build-essential
 
 COPY . .
 
 RUN npm install
 
-#RUN npm run-script build
+RUN npm run build
 
-EXPOSE 5173
+EXPOSE 4173
 
 ENV HOST=0.0.0.0
 
-CMD [ "npm", "run", "serve-dev" ]
+CMD [ "npm", "run", "preview" ]
