@@ -1,4 +1,4 @@
-import type { Template } from "$lib/types";
+import { SenderType, type Template } from "$lib/types";
 
 export const defaultTemplates: Template[] = [
   {
@@ -7,7 +7,7 @@ export const defaultTemplates: Template[] = [
     description: "Questions about a document.",
     systemPrompt: "You are a large language model. You were trained to help people to understand their documents. Answer as concisely as possible. If the problem is complicated, also print your thoughts step by step before printing the answer.",
     messagesPrompt: [{
-      sender: "user", texy:
+      sender: SenderType.USER, text:
         `I'm going to give you a document written in markdown containing LaTeX enclosed in $$ signs. Then I'm going to ask you a question about it. I'd like you to first write down exact quotes of parts of the document that would help answer the question, and then I'd like you to answer the question using facts from the quoted content. Here is the document:
 
 <document>
@@ -59,8 +59,8 @@ Answer the question immediately without preamble.
 Here is the first question: I do not understand what is the difference between Sarsa and Q-learning. How they differ and why it matters for the results?
 `,
     },
-      { sender: "assistant", texy: "Understand. What is your question?" },
-      { sender: "user", texy: "" }],
+      { sender: SenderType.ASSISTANT, text: "Understand. What is your question?" },
+      { sender: SenderType.USER, text: "" }],
     // variables: [{ target: "document", prompt: "URL for text document", type: "DOWNLOAD_URL" }],
     variables: [{ target: "document", prompt: "Text document", type: "TEXT" }],
   },
@@ -70,7 +70,7 @@ Here is the first question: I do not understand what is the difference between S
 //       description: "Questions about a document that will be downloaded from URL.",
 //       systemPrompt: "You are a large language model. You were trained to help people to understand their documents. Answer as concisely as possible. If the problem is complicated, also print your thoughts step by step before printing the answer.",
 //       messagesPrompt: [{
-//         sender: "user", texy:
+//         sender: SenderType.USER, text:
 //           `I'm going to give you a document written in markdown containing LaTeX enclosed in $$ signs. Then I'm going to ask you a question about it. I'd like you to first write down exact quotes of parts of the document that would help answer the question, and then I'd like you to answer the question using facts from the quoted content. Here is the document:
 //
 // <document>
@@ -122,8 +122,8 @@ Here is the first question: I do not understand what is the difference between S
 // Here is the first question: I do not understand what is the difference between Sarsa and Q-learning. How they differ and why it matters for the results?
 // `,
 //       },
-//         { sender: "assistant", texy: "Understand. What is your question?" },
-//         { sender: "user", texy: "" }],
+//         { sender: SenderType.ASSISTANT, text: "Understand. What is your question?" },
+//         { sender: SenderType.USER, text: "" }],
 //       // variables: [{ target: "document", prompt: "URL for text document", type: "DOWNLOAD_URL" }],
 //       variables: [{ target: "document", prompt: "Text document URL", type: "DOWNLOAD_URL" }],
 //     },

@@ -7,12 +7,10 @@
   import { goto } from "$app/navigation";
   import { ChatsListValid } from "$lib/stores/invalidations";
   import TemplateCreationBox from "$lib/compoenents/TemplateCreationBox.svelte";
-  import { getUserChats } from "$lib/api/getUserChats";
-  import { IsLoggedIn } from "$lib/stores/auth";
   import { defaultTemplates } from "$lib/data/defaultTemplates";
   import { getUserTemplates } from "$lib/api/getUserTemplates";
 
-  let templates: Template[] = [ ...defaultTemplates ];
+  let templates: Template[] = [...defaultTemplates];
   let loadingTemplates = false;
 
   const loadTemplates = async () => {
@@ -22,11 +20,11 @@
     if (r.success) {
       templates = [...r.data.map((c) => ({
         id: c.templateId,
-        name: c.data.name, 
+        name: c.data.name,
         description: "",
         systemPrompt: c.data.systemPrompt,
         messagesPrompt: c.data.messages,
-        variables: []
+        variables: [],
       })).reverse(), ...defaultTemplates];
     } else {
       toasts.error("Error loading new chats list");
@@ -38,7 +36,7 @@
   $: loadTemplates();
 
   //
-  const templatesVariables = {};
+  const templatesVariables: { [id: string]: { [target: string]: string } } = {};
 
   $: templates.forEach((template) => {
     templatesVariables[template.id] ??= {};
@@ -50,23 +48,25 @@
   const startChatFromTemplate = async (template: Template) => {
     console.log(template);
     const chatId = uuidv4();
-    let vars = {};
+    let varValues: { [target: string]: string } = {};
     template.variables.forEach((variable) => {
       switch (variable.type) {
         case "TEXT":
-          vars[variable.target] = variable;
+          varValues[variable.target] = templatesVariables[template.id][variable.target];
           break;
         case "DOWNLOAD_URL":
           toasts.error("Not implemented yet - DOWNLOAD_URL variable type");
           return;
-        // vars[variable.target] = "TODO";
+        // varValues[variable.target] = "TODO";
         // break;
       }
     });
+    console.log("msg.text", template.messagesPrompt);
+    console.log("vars", varValues);
     const chatData = {
       messages: template.messagesPrompt.map((msg) => ({
         sender: msg.sender,
-        text: format(msg.text, templatesVariables[template.id] || {}),
+        text: format(msg.text, varValues || {}),
       })),
       systemPrompt: template.systemPrompt,
       name: "Chat from template: " + template.name,
