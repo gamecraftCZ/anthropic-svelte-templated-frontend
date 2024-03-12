@@ -5,6 +5,7 @@
   export let template: Template;
   export let variableValues: { [key: string]: string } = {};
   export let onCreate: () => void;
+  export let creating: boolean = false;
 
   $: variableValues ??= { ...template.variables.reduce((acc, variable) => ({ [variable.target]: "", ...acc }), {}) };
 
@@ -12,7 +13,7 @@
   export let removeTemplateCallback;
 </script>
 
-<form on:submit={onCreate}>
+<form on:submit={() => creating ? null : onCreate()}>
   <div class="flex flex-col items-center m-5 p-5 rounded-xl bg-base-300 w-96">
     <div>
       <span class="text-lg font-bold">{template.name}</span>
@@ -29,6 +30,9 @@
                bind:value={variableValues[variable.target]} />
       {/each}
     </div>
-    <button class="btn btn-primary mt-5" type="submit">Start chat</button>
+    <button class="btn btn-primary mt-5" type="submit" disabled={creating}>
+      {#if creating}<div class="loading loading-sm" />{/if}
+      Start chat
+    </button>
   </div>
 </form>

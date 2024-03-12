@@ -47,6 +47,7 @@
     });
   });
 
+  let creating = false;
   const startChatFromTemplate = async (template: Template) => {
     console.log(template);
     const chatId = uuidv4();
@@ -74,7 +75,9 @@
       model: availableModelsMap["sonnet"].id,
       name: "Chat from template: " + template.name,
     };
+    creating = true;
     await saveChat({ chatId, chatData });
+    creating = false;
     goto(`/chat/${chatId}`);
     ChatsListValid.set(false);
   };
@@ -84,7 +87,7 @@
 
     if (r.success) templates = templates.filter((t) => t.id !== template.id);
     else toasts.error("Error removing template");
-    
+
   };
 </script>
 
@@ -93,7 +96,8 @@
   {#each templates as template}
     <TemplateCreationBox {template} onCreate={() => startChatFromTemplate(template)}
                          variableValues={templatesVariables[template.id]}
-                         removeTemplateCallback={template.default ? null : removeTemplateCallback} />
+                         removeTemplateCallback={template.default ? null : removeTemplateCallback}
+                         creating={creating} />
   {/each}
   {#if loadingTemplates}
     <div class="flex w-full mb-4">
