@@ -1,8 +1,7 @@
 <script lang="ts">
   import { SenderType } from "$lib/types";
-  import { CheckOutline, PenOutline, TicketOutline, TicketSolid, TrashBinSolid } from "flowbite-svelte-icons";
+  import { CheckOutline, PenOutline, TrashBinSolid } from "flowbite-svelte-icons";
   import { slide } from "svelte/transition";
-  import SvelteMarkdown from "svelte-markdown";
   import Markdown from "$lib/compoenents/Markdown.svelte";
   import { onMount } from "svelte";
 

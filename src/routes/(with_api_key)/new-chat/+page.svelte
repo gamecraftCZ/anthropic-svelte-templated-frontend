@@ -8,6 +8,7 @@
   import format from 'string-format';
   import TemplateCreationBox from "$lib/compoenents/TemplateCreationBox.svelte";
   import TemplatesSelect from "$lib/compoenents/TemplatesSelect.svelte";
+  import { availableModels, availableModelsMap } from "$lib/data/availableModels";
 
 
   const startEmptyChat = async () => {
@@ -15,6 +16,7 @@
     // toasts.success("New empty chat started with id: " + chatId);
     const chatData = {
       messages: [{ "sender": SenderType.USER, "text": "" }],
+      model: availableModelsMap["sonnet"].id,
       systemPrompt: "",
       name: ".chat.",
     };

@@ -9,18 +9,22 @@
   import { saveTemplate } from "$lib/api/saveTemplate";
   import { v4 as uuidv4 } from "uuid";
   import { goto } from "$app/navigation";
+  import { type AvailableModel, availableModels, availableModelsMap } from "$lib/data/availableModels";
 
   export let data: {
     success: boolean,
     chatId: string,
-    data?: { systemPrompt: string, name: string, messages: { text: string, sender: SenderType }[] }
+    data?: { systemPrompt: string, name: string, model: string, messages: { text: string, sender: SenderType }[] }
   };
-  
+
   let lastChatId: string | null = null;
   let originalname = data.data?.name || ".chat.";
-  
-  const saveChatData = async (chatId_, messages_, systemPrompt_, name_, originalname_) => {
-    await saveChat({ chatId: chatId_, chatData: { messages: messages_, systemPrompt: systemPrompt_, name: name_ } });
+
+  const saveChatData = async (chatId_, messages_, systemPrompt_, model_: string, name_, originalname_) => {
+    await saveChat({
+      chatId: chatId_,
+      chatData: { messages: messages_, systemPrompt: systemPrompt_, model: model_, name: name_ },
+    });
     if (originalname_ != name_) {
       originalname = name;
       ChatsListValid.set(false);
@@ -29,43 +33,53 @@
 
   const saveAsTemplate = async () => {
     const templateId = uuidv4();
-    const r = await saveTemplate({ templateId, templateData: { messages, systemPrompt, name } })
+    const r = await saveTemplate({ templateId, templateData: { messages, systemPrompt, name } });
     if (r.success) {
-      toasts.success("Template was created")
+      toasts.success("Template was created");
       goto("/new-chat");
     } else {
-      toasts.error("Template creation failed")
+      toasts.error("Template creation failed");
     }
   };
-  
+
   $: if (data.success) {
     onMount(() => {
       // Some onMount things
       // ...
       // OnUnmount()
       return async () => {
-        saveChatData(data.chatId, messages, systemPrompt, name, originalname)
+        saveChatData(data.chatId, messages, systemPrompt, modelToUse.id, name, originalname);
       };
     });
   }
-  
+
   $: if (lastChatId !== data.chatId) {
     if (lastChatId) {
-      saveChatData(lastChatId, messages, systemPrompt, name, originalname);
+      saveChatData(lastChatId, messages, systemPrompt, modelToUse.id, name, originalname);
     }
 
     name = data.data?.name || ".chat.";
     systemPrompt = data.data?.systemPrompt || "";
     messages = data.data?.messages || [{ sender: SenderType.USER, text: "" }];
+    modelToUse = data.data?.model ? availableModelsMap[data.data?.model] : {
+      id: "unknown",
+      name: "UNKNOWN MODEL",
+      apiId: "",
+    };
 
     originalname = name;
     lastChatId = data.success ? data.chatId : null;
   }
-  
+
   let loadError = data.success ? "" : "Failed to load chat data.";
   let systemPrompt = data.data?.systemPrompt || "";
   let name = data.data?.name || ".chat.";
   let messages = data.data?.messages || [{ sender: SenderType.USER, text: "" }];
+  let modelToUse: AvailableModel = data.data?.model ? availableModelsMap[data.data?.model] : {
+    id: "unknown",
+    name: "UNKNOWN MODEL",
+    apiId: "",
+  };
 
   const addMessage = () => {
     let sender = SenderType.USER;
@@ -95,7 +109,7 @@
 
     sendingMessages = true;
     const r = await getCompletion({
-      model: "claude-3-sonnet-20240229",
+      model: modelToUse.apiId,
       prompt: prompt,
       systemPrompt,
     });
@@ -107,7 +121,7 @@
         { text: r.data.content[0].text.trim(), sender: SenderType.ASSISTANT },
         { text: "", sender: SenderType.USER },
       ];
-      await saveChatData(data.chatId, messages, systemPrompt, name, originalname);
+      await saveChatData(data.chatId, messages, systemPrompt, modelToUse.id, name, originalname);
     } else {
       toasts.error("Failed to generate response");
     }
@@ -123,9 +137,14 @@
   <div class="flex flex-col h-screen overflow-hidden">
     <div class="ml-14">
       <input type="text" class="w-96 h-8 p-2 m-2 input bg-base-300" bind:value={name} placeholder="Chat name" />
+      <select class="w-52 select select-bordered" bind:value={modelToUse}>
+        {#each availableModels as model}
+          <option value={model}>{model.name}</option>
+        {/each}
+      </select>
       <button class="btn m-2" on:click={saveAsTemplate}>Save as template</button>
     </div>
-    
+
     <div>
       <textarea class="w-full h-24 p-2 textarea bg-base-300" bind:value={systemPrompt} placeholder="System prompt" />
     </div>

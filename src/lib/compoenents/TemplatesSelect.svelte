@@ -9,6 +9,7 @@
   import TemplateCreationBox from "$lib/compoenents/TemplateCreationBox.svelte";
   import { defaultTemplates } from "$lib/data/defaultTemplates";
   import { getUserTemplates } from "$lib/api/getUserTemplates";
+  import { availableModelsMap } from "$lib/data/availableModels";
 
   let templates: Template[] = [...defaultTemplates];
   let loadingTemplates = false;
@@ -69,6 +70,7 @@
         text: format(msg.text, varValues || {}),
       })),
       systemPrompt: template.systemPrompt,
+      model: availableModelsMap["sonnet"].id,
       name: "Chat from template: " + template.name,
     };
     await saveChat({ chatId, chatData });
