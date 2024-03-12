@@ -6,6 +6,8 @@ services:
     restart: always
     volumes:
       - "./database:/database"
+    environment:
+      - DATABASE_FILE=/database/database.sqlite
     ports:
       - "5072:4173"
 

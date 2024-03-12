@@ -1,9 +1,14 @@
 import { Sequelize } from "sequelize";
+import { DATABASE_FILE } from "$env/static/private";
+
+if (!DATABASE_FILE) {
+  throw new Error("DATABASE_FILE env file is not defined");
+}
 
 // Connect to SQLite db file
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "database/database.sqlite",
+  storage: DATABASE_FILE,
 });
 
 // DB model
@@ -43,4 +48,4 @@ export const Template = sequelize.define("Template", {
   },
 });
 
-await sequelize.sync({alter: true});
+await sequelize.sync({ alter: true });
