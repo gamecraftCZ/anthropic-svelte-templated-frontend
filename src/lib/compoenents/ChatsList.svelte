@@ -32,7 +32,7 @@
     chats = [];
   }
   
-  const removeChatCallback = async (chat:) => {
+  const removeChatCallback = async (chat) => {
     const r = await removeChat({chatId: chat.chatId});
     if (r.success) chats = chats.filter(c => c.chatId != chat.chatId);
     else toasts.error("Error removing chat");
