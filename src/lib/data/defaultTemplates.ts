@@ -4,6 +4,7 @@ export const defaultTemplates: Template[] = [
   {
     id: "uuid-1",
     name: "Ask about document",
+    default: true,
     description: "Questions about a document.",
     systemPrompt: "You are a large language model. You were trained to help people to understand their documents. Answer as concisely as possible. If the problem is complicated, also print your thoughts step by step before printing the answer. You can use Markdown and LaTeX to format your answer.",
     messagesPrompt: [{

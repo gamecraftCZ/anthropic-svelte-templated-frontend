@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Template } from "$lib/types";
+  import { TrashBinSolid } from "flowbite-svelte-icons";
 
   export let template: Template;
   export let variableValues: { [key: string]: string } = {};
@@ -8,11 +9,19 @@
   $: variableValues ??= { ...template.variables.reduce((acc, variable) => ({ [variable.target]: "", ...acc }), {}) };
 
   // $: console.log(variableValues);
+  export let removeTemplateCallback;
 </script>
 
 <form on:submit={onCreate}>
   <div class="flex flex-col items-center m-5 p-5 rounded-xl bg-base-300 w-96">
-    <span class="text-lg font-bold">{template.name}</span>
+    <div>
+      <span class="text-lg font-bold">{template.name}</span>
+      {#if removeTemplateCallback}
+        <button class="w-5 h-5" on:click={() => removeTemplateCallback?.(template)} type="button">
+          <TrashBinSolid />
+        </button>
+      {/if}
+    </div>
     <span class="text-sm">{template.description}</span>
     <div class="flex flex-col mt-5">
       {#each template.variables as variable}

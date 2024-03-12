@@ -10,6 +10,7 @@
   import { defaultTemplates } from "$lib/data/defaultTemplates";
   import { getUserTemplates } from "$lib/api/getUserTemplates";
   import { availableModelsMap } from "$lib/data/availableModels";
+  import { removeTemplate } from "$lib/api/removeTemplate";
 
   let templates: Template[] = [...defaultTemplates];
   let loadingTemplates = false;
@@ -77,13 +78,22 @@
     goto(`/chat/${chatId}`);
     ChatsListValid.set(false);
   };
+
+  const removeTemplateCallback = async (template: Template) => {
+    const r = await removeTemplate({ templateId: template.id });
+
+    if (r.success) templates = templates.filter((t) => t.id !== template.id);
+    else toasts.error("Error removing template");
+    
+  };
 </script>
 
 
 <div class="flex w-full overflow-y-auto flex-wrap">
   {#each templates as template}
     <TemplateCreationBox {template} onCreate={() => startChatFromTemplate(template)}
-                         variableValues={templatesVariables[template.id]} />
+                         variableValues={templatesVariables[template.id]}
+                         removeTemplateCallback={template.default ? null : removeTemplateCallback} />
   {/each}
   {#if loadingTemplates}
     <div class="flex w-full mb-4">

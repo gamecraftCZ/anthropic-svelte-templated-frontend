@@ -13,6 +13,7 @@ export type Message = {
 
 export type Template = {
   id: string;
+  default?: boolean;
   name: string;
   description: string;
   systemPrompt: string;
