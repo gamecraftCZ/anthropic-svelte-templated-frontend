@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { DATABASE_FILE } from "$env/static/private";
+import { DATABASE_FILE } from "$env/dynamic/private";
 
 if (!DATABASE_FILE) {
   throw new Error("DATABASE_FILE env file is not defined");
