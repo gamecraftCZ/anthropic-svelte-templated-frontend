@@ -1,14 +1,14 @@
 import { Sequelize } from "sequelize";
-import { DATABASE_FILE } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
 
-if (!DATABASE_FILE) {
+if (!env.DATABASE_FILE) {
   throw new Error("DATABASE_FILE env file is not defined");
 }
 
 // Connect to SQLite db file
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: DATABASE_FILE,
+  storage: env.DATABASE_FILE,
 });
 
 // DB model
