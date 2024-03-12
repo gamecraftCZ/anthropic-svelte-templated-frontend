@@ -2,12 +2,15 @@ version: '3'
 
 services:
   svelte_server:
-    build: .
+    build: 
+      context: .
+      args:
+        - DATABASE_FILE=/database/database.sqlite
+    environment:
+      - DATABASE_FILE=/database/database.sqlite
     restart: always
     volumes:
       - "./database:/database"
-    environment:
-      - DATABASE_FILE=/database/database.sqlite
     ports:
       - "5072:4173"
 
