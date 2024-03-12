@@ -9,7 +9,6 @@ export async function POST({ request }) {
       where: { templateId },
     });
 
-    console.log("removeTemplate: ", template);
     await template?.destroy();
 
     return json({}, { status: 200 });

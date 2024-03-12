@@ -7,11 +7,9 @@ export async function POST({ request }) {
 	const { token } = await request.json();
 
 	try {
-		const user = await User.findOne({
-			where: { token },
+		const [user, created] = await User.findOrCreate({
+			where: { token }
 		});
-
-		if (!user) return json({"error": "User not found"}, { status: 400 });
 		
 		return json({ hasApiKey: !!user.apiKey }, { status: 200 });
 		
