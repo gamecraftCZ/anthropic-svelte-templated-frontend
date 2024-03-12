@@ -1,7 +1,5 @@
 FROM node:20-bookworm-slim
 
-ARG DATABASE_FILE
-
 WORKDIR /usr/src/app
 
 RUN apt update
@@ -11,9 +9,9 @@ COPY . .
 
 RUN npm install
 
-
+ARG DATABASE_FILE
 ENV DATABASE_FILE=${DATABASE_FILE}
-
+RUN echo "DATABASE_FILE: '${DATABASE_FILE}'"
 RUN npm run build
 
 EXPOSE 4173
