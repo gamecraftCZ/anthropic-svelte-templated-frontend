@@ -14,7 +14,7 @@ export const getCompletion = async ({ model, prompt, maxTokens, systemPrompt, ap
 			body: JSON.stringify({
 				token: get(UserToken),
 				apiKey: apiKey,
-				requestData: { model, prompt, maxTokens: maxTokens ?? 1024, systemPrompt }
+				requestData: { model, prompt, maxTokens: maxTokens ?? 4096, systemPrompt }
 			}),
 			headers: {
 				'Content-Type': 'application/json'
