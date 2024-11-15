@@ -1,9 +1,13 @@
-export type AvailableModel = { id: string, name: string, apiId: string }; 
+export type AvailableModel = { id: string, name: string };
 export const availableModels: AvailableModel[] = [
-  { id: "opus", name: "Claude Opus (best)", apiId: "claude-3-opus-20240229" },
-  { id: "sonnet", name: "Claude Sonnet (good)", apiId: "claude-3-sonnet-20240229" },
-  { id: "haiku", name: "Claude haiku (cheap) (NOT YET AVAILABLE)", apiId: "" },
+  { id: "claude-3-5-sonnet-latest", name: "Claude Sonnet 3.5"},
+  { id: "claude-3-5-haiku-latest", name: "Claude Haiku 3.5"},
+  { id: "claude-3-opus-latest", name: "Claude Opus 3.0"},
+  { id: "claude-3-sonnet-latest", name: "Claude Sonnet 3.0"},
+  { id: "claude-3-haiku-latest", name: "Claude haiku 3.0"},
 ];
+
+export const defaultModel = availableModels[0];
 
 export const availableModelsMap = availableModels.reduce((acc, model) => {
   acc[model.id] = model;
